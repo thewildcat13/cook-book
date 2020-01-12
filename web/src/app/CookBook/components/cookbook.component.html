@@ -1,0 +1,92 @@
+<div class="container">
+    <h2>CookBook:</h2>
+
+    <div *ngIf="cookError?.message">
+        <div class="alert alert-danger" role="alert" id="CookError">
+            Some error occurred. Please try again
+        </div>
+    </div>
+
+
+    <div class="row">
+        <tree-root [nodes]="CookList" [options]="options">
+            <ng-template #treeNodeTemplate let-node let-index="index">
+                <div class="col"><b>Title:</b></div>
+                <div class="col">{{ node.data.title }}</div>
+                <div class="col"><b>Description:</b></div>
+                <div class="col">{{ node.data.description }}</div>
+                <div class="col"><b>Date:</b></div>
+                <div class="col">{{ node.data.createdAt | date }}</div>
+                <div class="col">
+                    <button *ngIf="!(node.data.id === selectedCook.id && selectedCook.action === 'FORK')"
+                        (click)="forkCook(node.data)"
+                        class="btn btn-primary fork"
+                        style="margin-right: 10px">
+                        Fork
+                    </button>
+                    <button *ngIf="!(node.data.id === selectedCook.id && selectedCook.action === 'EDIT')"
+                        (click)="editCook(node.data)"
+                        class="btn btn-primary edit">
+                        Edit
+                    </button>
+                </div>
+
+                <div *ngIf="node.data.id === selectedCook.id">
+                    <hr />
+                    <div class="row">
+                        <div class="form-group col-md-8">
+                            <input
+                                [(ngModel)]="title"
+                                class="form-control"
+                                name="title"
+                                placeholder="Title"
+                            />
+                            <textarea
+                                [(ngModel)]="description"
+                                class="form-control"
+                                name="description"
+                                placeholder="Description"
+                                rows="5"
+                            ></textarea>
+                        </div>
+                        <div class="col">
+                            <button *ngIf="node.data.id === selectedCook.id && selectedCook.action === 'FORK'"
+                                    (click)="createCook()"
+                                    class="btn btn-primary">
+                                Add
+                            </button>
+                            <button *ngIf="node.data.id === selectedCook.id && selectedCook.action === 'EDIT'"
+                                    (click)="updateCook()"
+                                    class="btn btn-primary">
+                                Update
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </ng-template>
+        </tree-root>
+    </div>
+
+    <div class="row">
+        <div class="col-sm-12 col-md-4">
+            <hr />
+            <input
+                [(ngModel)]="newTitle"
+                class="form-control"
+                name="title"
+                placeholder="Title"
+                style="margin-bottom: 10px"
+            />
+            <textarea
+                [(ngModel)]="newDescription"
+                class="form-control"
+                name="description"
+                placeholder="Description"
+                rows="5"
+                style="margin-bottom: 10px"
+            ></textarea>
+            <button (click)="createNewCook()" class="btn btn-primary">Add New Cook</button>
+        </div>
+        <div class="col-6"></div>
+    </div>
+</div>
